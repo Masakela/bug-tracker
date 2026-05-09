@@ -4,10 +4,11 @@ WORKDIR /app
 
 # Create mount point directory with proper permissions
 RUN mkdir -p /data && chmod 777 /data
+RUN mkdir -p /.cache/go-build && chmod -R 777 /.cache
 
-RUN mkdir /.cache 
+# RUN mkdir /.cache 
 
-RUN chmod -R 777 /.cache
+# RUN chmod -R 777 /.cache
 
 # Install wget for healthcheck
 RUN apk add --no-cache wget
