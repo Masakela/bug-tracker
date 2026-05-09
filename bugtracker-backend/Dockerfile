@@ -5,6 +5,10 @@ WORKDIR /app
 # Create mount point directory with proper permissions
 RUN mkdir -p /data && chmod 777 /data
 
+# Create cache dir and set permissions
+RUN mkdir -p /app/.cache && chmod -R 777 /app/.cache
+ENV GOCACHE=/app/.cache
+
 # Install wget for healthcheck
 RUN apk add --no-cache wget
 
