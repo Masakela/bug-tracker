@@ -2,6 +2,9 @@ FROM golang:1.21-alpine
 
 WORKDIR /app
 
+# Set the Go cache path before building
+ENV GOCACHE=/tmp/go-build
+
 # Create mount point directory with proper permissions
 RUN mkdir -p /data && chmod 777 /data
 
