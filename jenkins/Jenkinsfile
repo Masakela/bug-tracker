@@ -9,10 +9,6 @@ pipeline {
                    reuseNode true
                 }
             }
-            environment {
-                // Redirect the Go cache to the local workspace
-                GOCACHE = "${env.WORKSPACE}/.cache"
-            }
             steps {
                dir('bugtracker-backend') {
                    sh 'go test ./... -v'
