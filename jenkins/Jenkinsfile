@@ -8,10 +8,10 @@ pipeline {
                    image 'snakee/golang-junit:1.21' 
                    reuseNode true
                 }
+            }
             environment {
                 // Redirect the Go cache to the local workspace
                 GOCACHE = "${env.WORKSPACE}/.cache"
-                }
             }
             steps {
                dir('bugtracker-backend') {
