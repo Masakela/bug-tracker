@@ -54,6 +54,11 @@ pipeline {
                         }
                     }
                 }
+                stage('Launch Application') {
+                    steps {
+                        bat 'docker compose up --build -d'
+                    }
+                }
             }
         }
             
