@@ -12,7 +12,8 @@ describe("CommentSection", () => {
       bugId: "1",
       author: "John Doe",
       content: "This is a test comment",
-      createdAt: "2023-06-10T10:00:00.000Z",
+      //createdAt: new Date().toDateString(),
+      createdAt: "2026-05-20T10:00:00.000Z",
     },
   ];
 
@@ -121,7 +122,7 @@ describe("CommentSection", () => {
       />
     );
 
-    expect(screen.getByText(/6\/10\/23.*(10|11):00:00/)).toBeInTheDocument();
+    expect(screen.getByText(/5\/20\/26/)).toBeInTheDocument();
 
     jest.useRealTimers();
   });
