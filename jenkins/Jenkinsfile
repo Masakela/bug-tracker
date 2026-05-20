@@ -12,10 +12,8 @@ pipeline {
         stage('Unit Tests - Frontend'){
             steps{
                 dir('bugtracker-frontend'){
-                    bat '''
-                    npm ci
-                    npm test
-                    '''
+                    bat 'npm ci'
+                    bat 'npm test'
                 }
             }
         }
