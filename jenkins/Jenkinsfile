@@ -10,12 +10,18 @@ pipeline {
             }
         }
         stage('Unit Tests - Frontend'){
-            steps{
+            steps {
                 dir('bugtracker-frontend'){
                     bat '''
                     call npm ci
                     call npm test
                     '''
+                }
+            }
+            post {
+                always {
+                    junit 'backtracker-frontend/test-results.xml'
+
                 }
             }
         }
