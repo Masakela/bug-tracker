@@ -2,54 +2,60 @@ pipeline {
     agent any
 
     stages {
-        stage('Unit Tests - Backend') {
-            steps {
-               dir('bugtracker-backend') {
-                   bat '''
-                        call go test ./... -v 2>&1 | go-junit-report > test-results.xml
+        stage('Execute Unit Tests') {
+            parallel {
+                stage('Unit Tests - Backend') {
+                    steps {
+                    dir('bugtracker-backend') {
+                        bat '''
+                                call go test ./... -v 2>&1 | go-junit-report > test-results.xml
 
-                        #Generate coverage report
-                        call go test -coverprofile="coverage.out" -covermode=atomic ./...
-                        call go tool cover -html="coverage.out" -o coverage.html
+                                #Generate coverage report
+                                call go test -coverprofile="coverage.out" -covermode=atomic ./...
+                                call go tool cover -html="coverage.out" -o coverage.html
 
-                        mkdir -p reports
-                        move coverage.html reports/
-                    '''
-               }
-            }
-            post {
-                always {
-                    junit 'bugtracker-backend/test-results.xml'
-                    publishHTML target: [
-                        reportDir: 'bugtracker-backend/reports',
-                        reportFiles: 'coverage.html',
-                        reportName: 'Backend Coverage Report'
-                    ]
+                                mkdir -p reports
+                                move coverage.html reports/
+                            '''
+                    }
+                }
+                    post {
+                        always {
+                            junit 'bugtracker-backend/test-results.xml'
+                            publishHTML target: [
+                                reportDir: 'bugtracker-backend/reports',
+                                reportFiles: 'coverage.html',
+                                reportName: 'Backend Coverage Report'
+                            ]
+                        }
+                    }
+                }
+    
+                stage('Unit Tests - Frontend') {
+                    steps {
+                        dir('bugtracker-frontend') {
+                            bat '''
+                                call npm ci
+                                call npm test
+
+                                mkdir -p reports
+                                move coverage reports/
+                        '''
+                        }
+                    }
+                    post {
+                        always {
+                            junit 'bugtracker-frontend/test-results.xml'
+                            publishHTML target: [
+                                reportDir: 'bugtracker-frontend/reports/coverage',
+                                reportFiles: 'index.html',
+                                reportName: 'Frontend Coverage Report'
+                            ]
+                        }
+                    }
                 }
             }
         }
-        stage('Unit Tests - Frontend'){
-            steps {
-                dir('bugtracker-frontend'){
-                    bat '''
-                        call npm ci
-                        call npm test
-
-                        mkdir -p reports
-                        move coverage reports/
-                  '''
-                }
-            }
-            post {
-                always {
-                    junit 'bugtracker-frontend/test-results.xml'
-                    publishHTML target: [
-                        reportDir: 'bugtracker-frontend/reports/coverage',
-                        reportFiles: 'index.html',
-                        reportName: 'Frontend Coverage Report'
-                    ]
-                }
-            }
-        }
+            
     }
 }
