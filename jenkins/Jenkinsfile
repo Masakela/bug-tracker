@@ -13,8 +13,8 @@ pipeline {
             steps{
                 dir('bugtracker-frontend'){
                     bat '''
-                    npm ci
-                    npm test
+                    call npm ci
+                    call npm test
                     '''
                 }
             }
